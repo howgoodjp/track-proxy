@@ -8,25 +8,24 @@ app.use(express.json());
 
 const API_KEY = 'C2A6FA484B06594319BD7B09C8951BBF'; // 你的17TRACK金鑰
 
-// 前端呼叫這個API即可查貨態
 app.post('/track', async (req, res) => {
   const { shipCode } = req.body;
   if (!shipCode) return res.status(400).json({ error: 'Missing shipCode' });
 
   try {
-    // 17track 正確 endpoint
-    const apiRes = await fetch('https://api.17track.net/track/v2/gettrackinfo', {
+    const apiRes = await fetch('https://api.17track.net/track/v1/gettrackinfo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         '17token': API_KEY,
       },
       body: JSON.stringify({
-        nums: [shipCode]   // 必須是 array
+        number: shipCode,
+        carrier: "taiwan-7-11"
       }),
     });
     const data = await apiRes.json();
-    console.log('shipCode:', shipCode, 'result:', JSON.stringify(data)); // 這一行！
+    console.log('shipCode:', shipCode, 'result:', JSON.stringify(data));
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: 'API failed', detail: String(e) });
@@ -35,3 +34,4 @@ app.post('/track', async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log('17TRACK Proxy API running on ' + port));
+
