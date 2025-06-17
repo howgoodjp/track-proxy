@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
@@ -15,15 +14,15 @@ app.post('/track', async (req, res) => {
   if (!shipCode) return res.status(400).json({ error: 'Missing shipCode' });
 
   try {
-    const apiRes = await fetch('https://api.17track.net/track/v1/gettrackinfo', {
+    // 17track 正確 endpoint
+    const apiRes = await fetch('https://api.17track.net/track/v2/gettrackinfo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         '17token': API_KEY,
       },
       body: JSON.stringify({
-        number: shipCode,
-        carrier: "taiwan-7-11"
+        nums: [shipCode]   // 必須是 array
       }),
     });
     const data = await apiRes.json();
