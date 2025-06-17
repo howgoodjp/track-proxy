@@ -26,6 +26,7 @@ app.post('/track', async (req, res) => {
       }),
     });
     const data = await apiRes.json();
+    console.log('shipCode:', shipCode, 'result:', JSON.stringify(data)); // 這一行！
     res.json(data);
   } catch (e) {
     res.status(500).json({ error: 'API failed', detail: String(e) });
