@@ -13,16 +13,19 @@ app.post('/track', async (req, res) => {
   if (!shipCode) return res.status(400).json({ error: 'Missing shipCode' });
 
   try {
+    // 用正確格式發送
     const apiRes = await fetch('https://api.17track.net/track/v1/gettrackinfo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         '17token': API_KEY,
       },
-      body: JSON.stringify({
-        number: shipCode,
-        carrier: "taiwan-7-11"
-      }),
+      body: JSON.stringify([
+        {
+          number: shipCode,
+          carrier: "190456"  // 7-11的運輸商代碼
+        }
+      ]),
     });
     const data = await apiRes.json();
     console.log('shipCode:', shipCode, 'result:', JSON.stringify(data));
@@ -34,4 +37,3 @@ app.post('/track', async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log('17TRACK Proxy API running on ' + port));
-
